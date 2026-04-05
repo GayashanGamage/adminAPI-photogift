@@ -2,3 +2,6 @@
 __pycache__/
 .env
 .env.test
+test/
+app/test/
+__pycache__/
