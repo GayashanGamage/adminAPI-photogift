@@ -6,3 +6,4 @@ test/
 app/test/
 __pycache__/
 test.py
+.vscode
