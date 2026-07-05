@@ -12,6 +12,9 @@ from .email import EmailService
 from mypy_boto3_ses import SESClient
 from .cache import CachService
 from upstash_redis import Redis
+from .queu import QueueService
+from qstash.client import QStash
+from brevo import Brevo
 
 # this is for check where this instance run ( production or local )
 # according to the above, bellow files are loaded
@@ -41,12 +44,17 @@ class service_initiate():
         self.services['auth'] = auth.get_auth()
         
         # Initiate Email-serviceresponse
-        email = EmailService(os.getenv('aws_access_key_id'), os.getenv('aws_secret_access_key'), os.getenv('region'))
+        email = EmailService(os.getenv('email_key'))
         self.services['email'] = email.get_email()
+        # email = EmailService(os.getenv('email_key'), os.getenv('aws_secret_access_key'), os.getenv('region'))
+        # self.services['email'] = email.get_email()
         
         # Initiate the chaching system
         cache = CachService(os.getenv('UPSTASH_REDIS_REST_URL'), os.getenv('UPSTASH_REDIS_REST_TOKEN'))
         self.services['cache'] = cache.get_cache()
+
+        queue = QueueService(os.getenv("QSTASH_TOKEN"))
+        self.services['queue'] = queue.get_queue()
 
     def logger(self) -> Logger:
         # return the logger
@@ -60,7 +68,7 @@ class service_initiate():
         # get authontication connection
         return self.services.get('auth')
 
-    def email(self) -> SESClient:
+    def email(self) -> Brevo:
         # get email sender client
         return self.services.get('email')
 
@@ -68,4 +76,7 @@ class service_initiate():
         # get redis cache client
         return self.services.get('cache')
     
+    def queue(self) -> QStash:
+        return self.services.get('queue')
+
 service_container = service_initiate()
