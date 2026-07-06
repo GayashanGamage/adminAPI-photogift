@@ -11,6 +11,8 @@ from app.core.roles import Role
 
 servicess = service_initiate()
 
+class EmailData(BaseModel):
+    tem_password : str
 
 class EmailInfo(BaseModel):
     user_id : str
@@ -23,8 +25,6 @@ class EmailInfo(BaseModel):
     other_data : EmailData
     role : Role
 
-class EmailData(BaseModel):
-    tem_password : str
 
 router = APIRouter()
 
